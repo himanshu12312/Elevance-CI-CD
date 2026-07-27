@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'sh 'docker build -t elevance-cicd ./Docker''
+                sh 'docker build -t elevance-cicd ./Docker'
             }
         }
 
