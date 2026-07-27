@@ -12,12 +12,12 @@ pipeline {
             steps {
                 sh 'docker build -t elevance-cicd ./Docker'
             }
-        }
+        }  
 
         stage('Verify Docker Image') {
             steps {
                 sh 'docker images'
             }
-        }
+        } 
     }
 }
