@@ -10,13 +10,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'sudo docker build -t elevance-cicd ./Docker'
+                sh 'sh 'docker build -t elevance-cicd ./Docker''
             }
         }
 
         stage('Verify Docker Image') {
             steps {
-                sh 'sudo docker images'
+                sh 'docker images'
             }
         }
     }
