@@ -27,7 +27,7 @@ pipeline {
                 docker rm elevance-container || true
                 docker run -d \
                 --name elevance-container \
-                -p 5000:5000 \
+                -p 80:80 \
                 elevance-cicd
                 '''
             }
