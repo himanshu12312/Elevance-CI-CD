@@ -1,0 +1,27 @@
+---
+- name: Configure EC2 with Docker
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker image
+      command: docker pull himanshu12107/devops-project:v1
+
+    - name: Remove old container if it exists
+      command: docker rm -f devops-container
+      ignore_errors: yes
+
+    - name: Run Docker container
+      command: docker run -d --name devops-container -p 80:80 himanshu12107/devops-project:v1
