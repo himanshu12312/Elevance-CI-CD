@@ -51,6 +51,7 @@ Elevance-CI-CD/
 ├── Jenkinsfile
 ├── README.md
 └── .gitignore
+```
 
 ---
 
@@ -126,11 +127,11 @@ Connect to the EC2 instance using SSH.
 
 ---
 
-# 8. Java Installation
+# 8. Docker Installation & Version Verification
 
-Install Java on the EC2 instance, which is required to run Jenkins.
+Verify that Docker has been installed successfully.
 
-![Java Installation](Images/08_Java_Installation.png)
+![Docker Version](Images/08_Docker_Version.png)
 
 ---
 
