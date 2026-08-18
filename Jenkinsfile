@@ -55,8 +55,8 @@ pipeline {
             steps {
                 sh '''
                     ansible-playbook \
-                    -i ~/ansible/inventory \
-                    ~/ansible/playbook.yml
+                    -i /var/lib/jenkins/ansible/inventory
+                    /var/lib/jenkins/ansible/playbook.yml
                 '''
             }
         }
