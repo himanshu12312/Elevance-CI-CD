@@ -1,3 +1,12 @@
+resource "tls_private_key" "elevance_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "elevance_key" {
+  key_name   = "elevance-terraform-key"
+  public_key = tls_private_key.elevance_key.public_key_openssh
+}
 resource "aws_security_group" "web_sg" {
   name        = "web-security-group"
   description = "Allow SSH and HTTP"
@@ -37,7 +46,7 @@ resource "aws_security_group" "web_sg" {
 resource "aws_instance" "web" {
   ami           = "ami-0f918f7e67a3323f0"
   instance_type = "t3.small"
-  key_name      = "terraform-key"
+  key_name = aws_key_pair.elevance_key.key_name
 
   vpc_security_group_ids = [aws_security_group.web_sg.id]
 
@@ -52,4 +61,9 @@ resource "aws_instance" "web" {
   tags = {
     Name = "Terraform-EC2"
   }
+}
+resource "local_file" "private_key" {
+  content         = tls_private_key.elevance_key.private_key_pem
+  filename        = "${path.module}/elevance-terraform-key.pem"
+  file_permission = "0600"
 }

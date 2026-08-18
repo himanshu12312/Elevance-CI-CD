@@ -51,18 +51,12 @@ pipeline {
             }
         }
 
-        stage('Deploy Application') {
+        stage('Deploy with Ansible') {
             steps {
                 sh '''
-                    docker stop elevance-container || true
-                    docker rm elevance-container || true
-
-                    docker pull $IMAGE_NAME
-
-                    docker run -d \
-                        --name elevance-container \
-                        -p 80:80 \
-                        $IMAGE_NAME
+                    ansible-playbook \
+                    -i ~/ansible/inventory \
+                    ~/ansible/playbook.yml
                 '''
             }
         }

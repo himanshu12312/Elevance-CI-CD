@@ -1,4 +1,5 @@
 Terraform/.terraform/
 Terraform/*.tfstate
 Terraform/*.tfstate.*
+Terraform/*.pem
 Ansible/*.pem
