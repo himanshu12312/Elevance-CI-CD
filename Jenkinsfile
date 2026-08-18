@@ -53,11 +53,7 @@ pipeline {
 
         stage('Deploy with Ansible') {
             steps {
-                sh '''
-                    ansible-playbook \
-                    -i /var/lib/jenkins/ansible/inventory
-                    /var/lib/jenkins/ansible/playbook.yml
-                '''
+                sh 'ansible-playbook -i /var/lib/jenkins/ansible/inventory /var/lib/jenkins/ansible/playbook.yml'
             }
         }
     }
