@@ -44,6 +44,14 @@ pipeline {
                 }
             }
         }
+
+        
+        stage('Deploy with Ansible') {
+            steps {
+             sh 'ansible-playbook -i Ansible/Inventory Ansible/playbook.yml'
+            }
+        }
+
     }
 
     post {

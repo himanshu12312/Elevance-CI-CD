@@ -10,7 +10,7 @@
       ansible.builtin.command:
         cmd: docker pull himanshu12107/devops-project:latest
 
-    - name: Remove existing website container
+    - name: Remove old container if it exists
       ansible.builtin.command:
         cmd: docker rm -f devops-container
       register: remove_result
