@@ -1,12 +1,12 @@
+
 pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "himanshu12107/devops-project:latest"
+        IMAGE_NAME = 'himanshu12107/devops-project:latest'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -15,56 +15,43 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t elevance-cicd ./Docker'
+                sh 'docker build -t "$IMAGE_NAME" ./Docker'
             }
         }
 
-        stage('Verify Docker Image') {
+        stage('Test Docker Image') {
             steps {
-                sh 'docker images'
+                sh 'docker run --rm "$IMAGE_NAME" nginx -t'
             }
         }
 
-        stage('Docker Hub Login') {
+        stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub',
-                    usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASS'
-                )]) {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'dockerhub-creds',
+                        usernameVariable: 'DOCKERHUB_USERNAME',
+                        passwordVariable: 'DOCKERHUB_TOKEN'
+                    )
+                ]) {
                     sh '''
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        set +x
+                        echo "$DOCKERHUB_TOKEN" | docker login \
+                            -u "$DOCKERHUB_USERNAME" --password-stdin
+                        docker push "$IMAGE_NAME"
+                        docker logout
                     '''
                 }
-            }
-        }
-
-        stage('Tag Docker Image') {
-            steps {
-                sh 'docker tag elevance-cicd $IMAGE_NAME'
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                sh 'docker push $IMAGE_NAME'
-            }
-        }
-
-        stage('Deploy with Ansible') {
-            steps {
-                sh 'ansible-playbook -i /var/lib/jenkins/ansible/inventory /var/lib/jenkins/ansible/playbook.yml'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo 'Docker image built, tested, and pushed successfully!'
         }
-
-        always {
-            sh 'docker logout || true'
+        failure {
+            echo 'Pipeline failed. Check Console Output for the error.'
         }
     }
 }
